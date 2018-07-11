@@ -1,0 +1,9 @@
+Name;ID;UserType
+
+Dave Stacey;1;faculty
+April Sales;2;faculty
+Gabri Loa;3;student
+Ging Henie;4;student
+Roy Flores;5;librarian
+Elizabeth Harwell;6;librarian
+Anastacio Monsivais;7;student

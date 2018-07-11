@@ -1,0 +1,7 @@
+Title;PublisherDate;Volume;Issue;publisher;Articles
+
+EMERGING TRENDS in IOT;08-19-2014;10;11;IEEE Computer;a1, a2, a3
+COMMON FRAMEWORK;09-20-2014;10;11;Elsevier;c1, c2, c3
+ACM Computing Survey;10-12-2013;10;11;CACM;b1, b2, b3, b4
+Foundations in Machine Learning;01-22-2014;11;12;IEEE Society;e1, e2
+Molecular Systems Biology;10-12-2009;10;11;Springer Verlag;n1, n2, n4,n5, n6

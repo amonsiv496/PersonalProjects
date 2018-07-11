@@ -1,0 +1,8 @@
+Title;Publisher;date;ISBN;Copies;Author
+
+Java Programming;CRC Press;09/12/2005;9780203166178;20;Jo Wood
+Hadoop Big data;Yahoo press;10/15/2010;1449389732;04;White Tom
+Database Systems;CRC Press;10/10/2013;1111969604;05;Ramez Elmasri, Shamkant B. Navathe  
+Advanced Networking;John Wiley;12/09/2009;9780470534052;11;Doug Lowe, Chris Wang
+Artificial Intelligence;Newness;04/17/2009;9780080499451;12;Nils J. Nilsson
+Distributed Algorithms;MIT Press;06/12/2013;9780262318952;06;Tom Gedeon
