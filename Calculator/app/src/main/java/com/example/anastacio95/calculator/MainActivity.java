@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     //postfix
     private List<String> postfix = new ArrayList<>();
 
-
     String lastNum = null;
 
 
@@ -91,14 +90,14 @@ public class MainActivity extends AppCompatActivity {
             Button btns = (Button) v;
 
             //Gets current working directory
-            String filePath = getFilesDir().getPath().toString() + "/nums.txt";
+            String filePath = getFilesDir().getPath().toString() + "/nums";
             File file = new File(filePath);
             Scanner input = null;
 
             String btnString = btns.getText().toString();
 
             // Number from user appended in text file created
-            if (btnString.matches("-?\\d+") || btnString.matches("\\d+\\.\\d+([eE]\\d+)?")) {
+            if (btnString.matches(".*\\d+.*")) {
                 try {
                     //append numbers from user to file created
                     FileWriter fw = new FileWriter(file, true);
@@ -120,9 +119,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // If user enters any operator, operator added to infix notation
-            if (btnString.contains("+") || btnString.contains("-")
-                || btnString.contains("*") || btnString.contains("/")
-                || btnString.contains("(") || btnString.contains(")")){
+            if (btnString.equals("+") || btnString.equals("-")
+                || btnString.equals("*") || btnString.equals("/")
+                || btnString.equals("(") || btnString.equals(")")){
                 try{
                     if (file.exists() == true){
                         input = new Scanner(file);
@@ -145,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             // postfix notation
             if (btnString.contains("=")){
                 //Infix created and file deleted
-                if (infix.get(infix.size() - 1).contains(")") != true) {
+                if (infix.get(infix.size() - 1).equals(")") != true) {
                     infix.add(lastNum);
                 }
 
@@ -167,6 +166,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+            // infix, postfix, operator stack, and postfix stack cleared
+            // when user enters CLEAR
             if (btnString.contains("CLEAR")){
                 infix.clear();
                 postfix.clear();

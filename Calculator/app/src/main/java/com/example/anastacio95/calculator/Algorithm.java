@@ -20,19 +20,20 @@ public class Algorithm extends MainActivity{
         for (int i = 0; i < infix.size(); i++){
 
             // If current iterator from infix notation is a number, add it to postfix notation
-            if (infix.get(i).matches("-?\\d+") || infix.get(i).matches("\\d+\\.\\d+([eE]\\d+)?")){
+            if (infix.get(i).matches("-?\\d+") || infix.get(i).matches("\\d+\\.\\d+([eE]\\d+)?")
+                || infix.get(i).matches(".*\\d+.*")){
                 postfix.add(infix.get(i));
             }
 
             // If current iterator from infix notation is + or -, add it to operator stack
-            if (infix.get(i).toString().contains("+") || infix.get(i).toString().contains("-")){
+            if (infix.get(i).toString().equals("+") || infix.get(i).toString().equals("-")){
                 // If operator stack is empty, go ahead and add + or - to operator stack
                 if (operatorStack.empty() == true){
                     operatorStack.push(infix.get(i));
                 }
                 else { // Move the stack operator content to the postfix notation if stack
                       // operator is not empty and if stack operator doesn't contain (
-                    while (operatorStack.empty() != true && operatorStack.peek().toString().contains("(") != true){
+                    while (operatorStack.empty() != true && operatorStack.peek().toString().equals("(") != true){
                         postfix.add(operatorStack.pop().toString());
                     }
                     // Add + or - to operator stack
@@ -41,14 +42,14 @@ public class Algorithm extends MainActivity{
             }
 
             // If current iterator from infix notation is * or /, add it to operator stack
-            if (infix.get(i).toString().contains("*") || infix.get(i).toString().contains("/")){
+            if (infix.get(i).toString().equals("*") || infix.get(i).toString().equals("/")){
                 // If operator stack is empty, add * or / to the operator stack
                 if (operatorStack.empty() == true){
                     operatorStack.push(infix.get(i));
                 }
                 else { // Add * or / to the postfix notation if stack
                       // operator contains +, -, or (
-                    if (operatorStack.peek().toString().contains("+") || operatorStack.peek().toString().contains("-") || operatorStack.peek().toString().contains("(") == true ){
+                    if (operatorStack.peek().toString().equals("+") || operatorStack.peek().toString().equals("-") || operatorStack.peek().toString().equals("(") == true ){
                         operatorStack.push(infix.get(i));
                     }
                     // Move top operator from operator stack to postix notation
@@ -61,14 +62,14 @@ public class Algorithm extends MainActivity{
             }
 
             // If current iterator from infix notation is ( add it to operator stack
-            if (infix.get(i).toString().contains("(") == true){
+            if (infix.get(i).toString().equals("(") == true){
                 operatorStack.push(infix.get(i));
             }
 
             // If current iterator from infix notation is ), move the content
             // from operator stack to postfix notation until the top of the
             // operator stack is (
-            if (infix.get(i).toString().contains(")") == true){
+            if (infix.get(i).toString().equals(")") == true){
                 if (operatorStack.peek().toString().contains("(") != true){
                     postfix.add(operatorStack.pop().toString());
                 }
@@ -88,7 +89,8 @@ public class Algorithm extends MainActivity{
         // Postfix operation algorithm
         for (int j = 0; j < postfix.size(); j++){
             // Push number to the stack
-            if (postfix.get(j).matches("-?\\d+") || postfix.get(j).matches("\\d+\\.\\d+([eE]\\d+)?")){
+            if (postfix.get(j).matches("-?\\d+") || postfix.get(j).matches("\\d+\\.\\d+([eE]\\d+)?")
+                || postfix.get(j).matches(".*\\d+.*")){
                 postfixStack.push(postfix.get(j));
             }
 
@@ -98,7 +100,7 @@ public class Algorithm extends MainActivity{
             // and second number from the top of the postfix stack is used as the left value
             // The result from the operator is pushed to the postfix stack and the right value
             // and left value are removed from the stack
-            if (postfix.get(j).contains("*")){
+            if (postfix.get(j).equals("*")){
                 double rightNum = Double.parseDouble(postfixStack.pop().toString());
                 double leftNum = Double.parseDouble(postfixStack.pop().toString());
                 String result = Double.toString(leftNum * rightNum);
@@ -111,7 +113,7 @@ public class Algorithm extends MainActivity{
             // and second number from the top of the postfix stack is used as the left value
             // The result from the operator is pushed to the postfix stack and the right value
             // and left value are removed from the stack
-            if (postfix.get(j).contains("/")){
+            if (postfix.get(j).equals("/")){
                 double rightNum = Double.parseDouble(postfixStack.pop().toString());
                 double leftNum = Double.parseDouble(postfixStack.pop().toString());
                 String result = Double.toString(leftNum / rightNum);
@@ -124,7 +126,7 @@ public class Algorithm extends MainActivity{
             // and second number from the top of the postfix stack is used as the left value
             // The result from the operator is pushed to the postfix stack and the right value
             // and left value are removed from the stack
-            if (postfix.get(j).contains("+")){
+            if (postfix.get(j).equals("+")){
                 double rightNum = Double.parseDouble(postfixStack.pop().toString());
                 double leftNum = Double.parseDouble(postfixStack.pop().toString());
                 String result = Double.toString(leftNum + rightNum);
@@ -137,7 +139,7 @@ public class Algorithm extends MainActivity{
             // and second number from the top of the postfix stack is used as the left value
             // The result from the operator is pushed to the postfix stack and the right value
             // and left value are removed from the stack
-            if (postfix.get(j).contains("-")){
+            if (postfix.get(j).equals("-")){
                 double rightNum = Double.parseDouble(postfixStack.pop().toString());
                 double leftNum = Double.parseDouble(postfixStack.pop().toString());
                 String result = Double.toString(leftNum - rightNum);
