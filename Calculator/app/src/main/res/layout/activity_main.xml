@@ -132,7 +132,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/dotBtn2"
+        android:id="@+id/dotBtn"
         android:layout_width="100dp"
         android:layout_height="70dp"
         android:layout_marginBottom="68dp"

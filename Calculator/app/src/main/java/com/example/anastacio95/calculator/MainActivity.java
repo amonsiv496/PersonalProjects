@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         Button equalsBtn = (Button) findViewById(R.id.equalsBtn);
         Button leftParBtn = (Button) findViewById(R.id.leftParBtn);
         Button rightParBtn = (Button) findViewById(R.id.rightParBtn);
+        Button dotBtn = (Button) findViewById(R.id.dotBtn);
 
         //Button setOnClickListener
         zeroBtn.setOnClickListener(btnListener);
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         equalsBtn.setOnClickListener(btnListener);
         leftParBtn.setOnClickListener(btnListener);
         rightParBtn.setOnClickListener(btnListener);
+        dotBtn.setOnClickListener(btnListener);
     }
 
     //OnClickListener for buttons
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             String btnString = btns.getText().toString();
 
             // Number from user appended in text file created
-            if (btnString.matches(".*\\d+.*")) {
+            if (btnString.matches(".*\\d+.*") || btnString.equals(".")) {
                 try {
                     //append numbers from user to file created
                     FileWriter fw = new FileWriter(file, true);
