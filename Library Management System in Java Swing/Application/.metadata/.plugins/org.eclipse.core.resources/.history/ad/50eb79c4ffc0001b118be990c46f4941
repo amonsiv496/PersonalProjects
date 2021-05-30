@@ -1,0 +1,15 @@
+package appgraphics;
+
+import javax.swing.JFrame;
+
+public class LibrarianSection extends JFrame{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2705218101352459052L;
+
+	public LibrarianSection() {
+		// Librarian Section Window
+	}
+}

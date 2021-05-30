@@ -1,0 +1,8 @@
+package appgraphics;
+
+public class LibrarianSection {
+	
+	public LibrarianSection() {
+		
+	}
+}

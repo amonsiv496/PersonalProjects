@@ -1,6 +1,14 @@
 package appgraphics;
 
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -63,5 +71,49 @@ public class LibrarianLogin extends JFrame {
 		springLayout.putConstraint(SpringLayout.NORTH, loginBtn, 40, SpringLayout.SOUTH, passwordField);
 		
 		setVisible(true);
+		
+		// Register Listeners
+		loginBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String url = "jdbc:sqlserver://DESKTOP-GUG0PM4;databaseName=LibraryManagementSystem;";
+				String user = "tester";
+				String password = "tester";
+				
+				try {
+					Connection connection = DriverManager.getConnection(url, user, password);
+					
+					PreparedStatement statement = connection.prepareStatement("SELECT * FROM dbo.librarian WHERE name = ?");
+					
+					statement.setString(1, nameInputTextField.getText());
+					ResultSet result = statement.executeQuery();
+					
+					// goes to first row
+					result.next();
+					
+					String name = result.getString("name");
+					String password1 = result.getString("password");
+					
+					if(nameInputTextField.getText().equals(name)) {
+						if (passwordField.getText().equals(password1)) {
+							System.out.println("Logged in successfully!");
+							dispose();
+							LibrarianSection librarianSection = new LibrarianSection();
+						} else {
+							System.out.println("password does not match to that user");
+						}
+					} else {
+						System.out.println("username does not exist");
+					}
+					
+					System.out.println("Connected to Microsoft SQL Server");
+					System.out.println("Closing Connection");
+					connection.close();
+				} catch (SQLException e1) {
+					System.out.println("Opps, there's an error");
+					e1.printStackTrace();
+				}
+			}
+		});
 	}
 }

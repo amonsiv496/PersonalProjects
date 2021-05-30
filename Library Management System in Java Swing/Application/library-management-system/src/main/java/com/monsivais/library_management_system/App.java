@@ -11,7 +11,5 @@ import appgraphics.AddLibrarian;
 public class App {
     public static void main( String[] args ) {
     	MainMenu mainMenu = new MainMenu();
-//    	AdminSection adminSection = new AdminSection();
-//    	AddLibrarian addLibrarian = new AddLibrarian();
     }
 }

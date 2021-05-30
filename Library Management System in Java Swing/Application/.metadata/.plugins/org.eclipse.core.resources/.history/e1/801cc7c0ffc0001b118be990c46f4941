@@ -1,0 +1,10 @@
+package appgraphics;
+
+import javax.swing.JFrame;
+
+public class LibrarianSection extends JFrame{
+	
+	public LibrarianSection() {
+		// Librarian Section Window
+	}
+}
