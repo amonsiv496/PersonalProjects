@@ -12,7 +12,7 @@ public class LibrarianSection extends JFrame{
 	public LibrarianSection() {
 		// Librarian Section Window
 		setTitle("Libarian Section");
-		setSize(600, 800);
+		setSize(600, 600);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
