@@ -221,6 +221,7 @@ public class ParseRawExcelFile {
 			int statementSummaryDoneIn = 0;
 			int beginningBalanceDoneIn = 0;
 			int depositsOtherCreditsDoneIn = 0;
+			int depositsOtherDebitsDoneIn = 0;
 			
 			// This is to store STATEMENT SUMMARY row
 			ArrayList<String> statementSummaryTitleRow = null;
@@ -243,6 +244,12 @@ public class ParseRawExcelFile {
 			ArrayList<String> depositsOtherDebitsRow = new ArrayList<>();
 			String depositsOtherDebitsRowText = null;
 			String depositsOtherDebitsRowAmount = null;
+			
+			// This is to store Ending Balance row
+			ArrayList<String> endingBalanceRow = new ArrayList<>();
+			String endingBalanceDate = null;
+			String endingBalanceText = null;
+			String endingBalanceAmount = null;
 
 			// Iterate through all rows
 			for (int rowNumber = 0; rowNumber < sheet.getLastRowNum(); rowNumber++) {
@@ -334,6 +341,33 @@ public class ParseRawExcelFile {
 						depositsOtherDebitsRow.add(depositsOtherDebitsRowAmount);
 						
 						depositsOtherCreditsDoneIn = 0;
+						depositsOtherDebitsDoneIn = 1;
+						break;
+						
+					} else if (depositsOtherDebitsDoneIn == 1) {
+						
+						// Obtain information for Ending Balance row
+						// Iterate through Ending Balance row
+						for (; cellNum1 < row.getLastCellNum() - 1; cellNum1++) {
+							if (firstIterationIn == 1) {// first iteration to insert ending balance date and insert first text iteration to ending balance text
+								endingBalanceDate = row.getCell(cellNum1).toString();
+								endingBalanceText = row.getCell(++cellNum1).toString() + " ";
+								firstIterationIn = 0;
+							} else if (cellNum1 != row.getLastCellNum() - 2) { // this is to add ending balance text
+								endingBalanceText = endingBalanceText + row.getCell(cellNum1) + " ";
+							} else { // do not add a space if it is the last element
+								endingBalanceText = endingBalanceText + row.getCell(cellNum1) + " ----------->";
+							}
+						}
+						
+						// Obtain endingBalanceAmount
+						endingBalanceAmount = row.getCell(row.getLastCellNum() - 1).toString();
+						
+						endingBalanceRow.add(endingBalanceDate);
+						endingBalanceRow.add(endingBalanceText);
+						endingBalanceRow.add(endingBalanceAmount);
+						
+						depositsOtherDebitsDoneIn = 0;
 						break;
 					}
 				}
@@ -345,6 +379,7 @@ public class ParseRawExcelFile {
 			statementSummary.add(beginningBalanceRow);
 			statementSummary.add(depositsOtherCreditsRow);
 			statementSummary.add(depositsOtherDebitsRow);
+			statementSummary.add(endingBalanceRow);
 						
 
 		} catch (EncryptedDocumentException e) {

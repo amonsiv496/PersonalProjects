@@ -13,8 +13,8 @@ public class App {
 	public static void main(String[] args) {
 		
 		// Obtain pdf file
-		//File pdfFile = new File("C:\\Users\\anast\\Documents\\Online Accounts\\Prosperity Bank\\Account Statements\\2024 Statements\\statement_02112024.pdf");
-		File pdfFile = new File("C:\\Users\\anast\\Documents\\Online Accounts\\Prosperity Bank\\Account Statements\\2018 Statements\\statement_06112018.pdf");
+		File pdfFile = new File("C:\\Users\\anast\\Documents\\Online Accounts\\Prosperity Bank\\Account Statements\\2024 Statements\\statement_02112024.pdf");
+		//File pdfFile = new File("C:\\Users\\anast\\Documents\\Online Accounts\\Prosperity Bank\\Account Statements\\2018 Statements\\statement_06112018.pdf");
 		
 		
 		// Convert pdf file to .xlsx extension
@@ -43,8 +43,9 @@ public class App {
 		System.out.println("Address Name: " + parseRawExcelFile.getAddressName());
 		System.out.println("Address City: " + parseRawExcelFile.getAddressCity());
 		System.out.println();
-		ArrayList<ArrayList<String>> statementSummaryInfo = parseRawExcelFile.getStatementSummary();
 		
+		
+		ArrayList<ArrayList<String>> statementSummaryInfo = parseRawExcelFile.getStatementSummary();
 		System.out.println(statementSummaryInfo.get(0).get(0).toString() + " " + statementSummaryInfo.get(0).get(1).toString());
 		System.out.println(statementSummaryInfo.get(1).get(0).toString() 
 				+ " " + statementSummaryInfo.get(1).get(1).toString()
@@ -52,6 +53,8 @@ public class App {
 				);
 		System.out.println(statementSummaryInfo.get(2).get(0).toString() + " " + statementSummaryInfo.get(2).get(1).toString());
 		System.out.println(statementSummaryInfo.get(3).get(0).toString() + " " + statementSummaryInfo.get(3).get(1).toString());
+		System.out.println(statementSummaryInfo.get(4).get(0).toString() + " " + statementSummaryInfo.get(4).get(1).toString()
+				+ " " + statementSummaryInfo.get(4).get(2).toString());
 		
 		
 		
