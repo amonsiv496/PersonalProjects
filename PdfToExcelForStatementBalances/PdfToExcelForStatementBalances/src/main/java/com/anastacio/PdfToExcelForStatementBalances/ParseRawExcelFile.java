@@ -214,17 +214,19 @@ public class ParseRawExcelFile {
 			Sheet sheet = workbook.getSheetAt(0);
 
 			
-			// flag to indicate if the loop iteration has completed for statementSummaryRow
-			int statementSummaryIn = 0;
-			// flag to indicate if the loop iteration has completed for beginningSummaryRow
-			int beginningBalanceIn = 0;
+			// this is to indicate first iteration when iterating through row cells
+			int firstIterationIn = 1;
+			
+			// flag to indicate if the loop iteration has completed for said row
+			int statementSummaryDoneIn = 0;
+			int beginningBalanceDoneIn = 0;
+			int depositsOtherCreditsDoneIn = 0;
 			
 			// This is to store STATEMENT SUMMARY row
 			ArrayList<String> statementSummaryTitleRow = null;
 			// this is to store what's after "STATEMENT SUMMARY"
 			String statementSummaryTitleInfo = null;
-			// this is to indicate first iteration when iterating through what's after STATEMENT SUMMARY
-			int statementSummaryTitleInfoFirstIt = 1;
+			
 			
 			// This is to store Beginning Balance row
 			ArrayList<String> beginningBalanceRow = new ArrayList<>();
@@ -232,10 +234,15 @@ public class ParseRawExcelFile {
 			String beginningBalanceText = null;
 			String beginningBalanceAmount = null;
 			
-			// This is to store Beginning Balance row
+			// This is to store depositsOtherCredits row
 			ArrayList<String> depositsOtherCreditsRow = new ArrayList<>();
 			String depositsOtherCreditsText = null;
 			String depositsOtherCreditsAmount = null;
+			
+			// This is to store depositsOtherDebitsRow row
+			ArrayList<String> depositsOtherDebitsRow = new ArrayList<>();
+			String depositsOtherDebitsRowText = null;
+			String depositsOtherDebitsRowAmount = null;
 
 			// Iterate through all rows
 			for (int rowNumber = 0; rowNumber < sheet.getLastRowNum(); rowNumber++) {
@@ -253,9 +260,9 @@ public class ParseRawExcelFile {
 						
 						// Iterate through the rest of STATEMENT SUMMARY row
 						for (cellNum1 = cellNum1 + 2; cellNum1 < row.getLastCellNum(); cellNum1++) {
-							if (statementSummaryTitleInfoFirstIt == 1) {// first iteration to insert first value to statementSummaryRestInfo to avoid first value from being null
+							if (firstIterationIn == 1) {// first iteration to insert first value to statementSummaryRestInfo to avoid first value from being null
 								statementSummaryTitleInfo = row.getCell(cellNum1) + " ";
-								statementSummaryTitleInfoFirstIt = 0;
+								firstIterationIn = 0;
 							} else if (cellNum1 != row.getLastCellNum() - 1) { // keep adding elements with a space in between
 								statementSummaryTitleInfo = statementSummaryTitleInfo + row.getCell(cellNum1) + " ";
 							} else { // do not add a space if it is the last element
@@ -263,10 +270,10 @@ public class ParseRawExcelFile {
 								statementSummaryTitleRow.add(statementSummaryTitleInfo);
 							}
 						}
-						statementSummaryIn = 1;
+						statementSummaryDoneIn = 1;
 						break;
 						
-					} else if (statementSummaryIn == 1) {
+					} else if (statementSummaryDoneIn == 1) {
 						// Obtain information for Beginning Balance row
 						beginningBalanceDate = row.getCell(0).toString();
 						beginningBalanceText = row.getCell(1).toString() + " " + row.getCell(2).toString();
@@ -276,18 +283,18 @@ public class ParseRawExcelFile {
 						beginningBalanceRow.add(beginningBalanceText);
 						beginningBalanceRow.add(beginningBalanceAmount);
 						
-						statementSummaryIn = 0;
-						beginningBalanceIn = 1;
+						statementSummaryDoneIn = 0;
+						beginningBalanceDoneIn = 1;
 						break;
 						
-					} else if (beginningBalanceIn == 1) {
+					} else if (beginningBalanceDoneIn == 1) {
 						
 						// Obtain information for Deposits/Other row
 						// Iterate through Deposits/Other row
 						for (; cellNum1 < row.getLastCellNum() - 1; cellNum1++) {
-							if (statementSummaryTitleInfoFirstIt == 1) {// first iteration to insert first value to Deposits/Other to avoid first value from being null
+							if (firstIterationIn == 1) {// first iteration to insert first value to Deposits/Other to avoid first value from being null
 								depositsOtherCreditsText = row.getCell(cellNum1) + " ";
-								statementSummaryTitleInfoFirstIt = 0;
+								firstIterationIn = 0;
 							} else if (cellNum1 != row.getLastCellNum() - 2) { // keep adding elements with a space in between
 								depositsOtherCreditsText = depositsOtherCreditsText + row.getCell(cellNum1) + " ";
 							} else { // do not add a space if it is the last element
@@ -301,16 +308,43 @@ public class ParseRawExcelFile {
 						depositsOtherCreditsRow.add(depositsOtherCreditsText);
 						depositsOtherCreditsRow.add(depositsOtherCreditsAmount);
 						
-						beginningBalanceIn = 0;
+						beginningBalanceDoneIn = 0;
+						depositsOtherCreditsDoneIn = 1;
+						break;
+						
+					} else if (depositsOtherCreditsDoneIn == 1) {
+						
+						// Obtain information for Checks/Other Debits row
+						// Iterate through Checks/Other Debits row
+						for (; cellNum1 < row.getLastCellNum() - 1; cellNum1++) {
+							if (firstIterationIn == 1) {// first iteration to insert first value to Deposits/Other to avoid first value from being null
+								depositsOtherDebitsRowText = row.getCell(cellNum1) + " ";
+								firstIterationIn = 0;
+							} else if (cellNum1 != row.getLastCellNum() - 2) { // keep adding elements with a space in between
+								depositsOtherDebitsRowText = depositsOtherDebitsRowText + row.getCell(cellNum1) + " ";
+							} else { // do not add a space if it is the last element
+								depositsOtherDebitsRowText = depositsOtherDebitsRowText + row.getCell(cellNum1);
+							}
+						}
+						
+						// Obtain depositsOtherCreditsAmount
+						depositsOtherDebitsRowAmount = row.getCell(row.getLastCellNum() - 1).toString();
+						
+						depositsOtherDebitsRow.add(depositsOtherDebitsRowText);
+						depositsOtherDebitsRow.add(depositsOtherDebitsRowAmount);
+						
+						depositsOtherCreditsDoneIn = 0;
 						break;
 					}
 				}
-				statementSummaryTitleInfoFirstIt = 1;
+				firstIterationIn = 1;
 			}
 			
-			statementSummary.add(statementSummaryTitleRow); // done adding statement summary title row
-			statementSummary.add(beginningBalanceRow); // done adding beginning balance row
-			statementSummary.add(depositsOtherCreditsRow); // done deposits/other credits row 
+			// done adding said row
+			statementSummary.add(statementSummaryTitleRow);
+			statementSummary.add(beginningBalanceRow);
+			statementSummary.add(depositsOtherCreditsRow);
+			statementSummary.add(depositsOtherDebitsRow);
 						
 
 		} catch (EncryptedDocumentException e) {

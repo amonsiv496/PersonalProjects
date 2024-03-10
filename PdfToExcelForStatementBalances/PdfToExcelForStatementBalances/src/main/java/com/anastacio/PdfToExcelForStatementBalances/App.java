@@ -50,8 +50,9 @@ public class App {
 				+ " " + statementSummaryInfo.get(1).get(1).toString()
 				+ " " + statementSummaryInfo.get(1).get(2).toString()
 				);
-		
 		System.out.println(statementSummaryInfo.get(2).get(0).toString() + " " + statementSummaryInfo.get(2).get(1).toString());
+		System.out.println(statementSummaryInfo.get(3).get(0).toString() + " " + statementSummaryInfo.get(3).get(1).toString());
+		
 		
 		
 	} // end of main
