@@ -395,5 +395,59 @@ public class ParseRawExcelFile {
 	
 	
 	
+	
+	
+	public ArrayList<ArrayList<String>> getDepositsOtherCreditsSection() {
+		Workbook workbook = null;
+		
+		// Array list of array list for depositsOtherCreditsSection information
+		ArrayList<ArrayList<String>> depositsOtherCreditsSection = new ArrayList<>();
+		
+		try {
+			
+			rawExcelFileInput = new FileInputStream(rawExcelFile);
+			workbook = WorkbookFactory.create(rawExcelFileInput);
+
+			// get the first sheet of raw excel file
+			Sheet sheet = workbook.getSheetAt(0);
+			
+			// This is to store DEPOSITS/OTHER CREDITS title row
+			ArrayList<String> depositsOtherCreditsTitleRow = new ArrayList<>();
+			// this is to store DEPOSITS/OTHER CREDITS title text
+			String depositsOtherCreditsTitleText = null;
+
+			// Iterate through all rows
+			for (int rowNumber = 0; rowNumber < sheet.getLastRowNum(); rowNumber++) {
+				Row row = sheet.getRow(rowNumber);
+				
+				// Iterate through all cells in row
+				for (int cellNum1 = 0; cellNum1 < row.getLastCellNum(); cellNum1++) {
+					
+					// Obtain information for DEPOSITS/OTHER CREDITS row
+					if (row.getCell(cellNum1).toString().equals("DEPOSITS/OTHER") && row.getCell(cellNum1 + 1).toString().equals("CREDITS")) {
+						
+						depositsOtherCreditsTitleText = row.getCell(cellNum1).toString() + " " + row.getCell(cellNum1 + 1).toString();
+						depositsOtherCreditsTitleRow.add(depositsOtherCreditsTitleText.toString());
+					}
+				}
+			}
+						
+			// done adding said row
+			depositsOtherCreditsSection.add(depositsOtherCreditsTitleRow);
+						
+
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return depositsOtherCreditsSection;
+	}
+	
+	
+	
 }
 

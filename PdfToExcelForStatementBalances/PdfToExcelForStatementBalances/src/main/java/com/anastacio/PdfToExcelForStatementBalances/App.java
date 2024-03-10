@@ -55,6 +55,11 @@ public class App {
 		System.out.println(statementSummaryInfo.get(3).get(0).toString() + " " + statementSummaryInfo.get(3).get(1).toString());
 		System.out.println(statementSummaryInfo.get(4).get(0).toString() + " " + statementSummaryInfo.get(4).get(1).toString()
 				+ " " + statementSummaryInfo.get(4).get(2).toString());
+		System.out.println();
+		
+		
+		ArrayList<ArrayList<String>> depositsOtherCreditsSectionInfo = parseRawExcelFile.getDepositsOtherCreditsSection();
+		System.out.println(depositsOtherCreditsSectionInfo.get(0).get(0));
 		
 		
 		
