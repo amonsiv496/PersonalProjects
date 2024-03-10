@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Row;
@@ -397,7 +400,7 @@ public class ParseRawExcelFile {
 	
 	
 	
-	public ArrayList<ArrayList<String>> getDepositsOtherCreditsSection() {
+	public List<Map<String, String>> getDepositsOtherCreditsSection() {
 		Workbook workbook = null;
 		
 		// Array list of array list for depositsOtherCreditsSection information
@@ -405,6 +408,9 @@ public class ParseRawExcelFile {
 
 		// flag to indicate if the loop iteration has completed for said row
 		int depositsOtherCreditsTitleRowDoneIn = 0;
+		int depositsOtherCreditsColumnNamesRowDoneIn = 0;
+		
+		List<Map<String, String>> arrayListOfHashMap = new ArrayList<>();
 		
 		try {
 			
@@ -413,6 +419,9 @@ public class ParseRawExcelFile {
 
 			// get the first sheet of raw excel file
 			Sheet sheet = workbook.getSheetAt(0);
+
+			// this is to indicate first iteration when iterating through row cells
+			int firstIterationIn = 1;
 			
 			// This is to store DEPOSITS/OTHER CREDITS title row
 			ArrayList<String> depositsOtherCreditsTitleRow = new ArrayList<>();
@@ -424,6 +433,16 @@ public class ParseRawExcelFile {
 			String depositsOtherCreditsColumnNameDate = null;
 			String depositsOtherCreditsColumnNameDescription = null;
 			String depositsOtherCreditsColumnNameAmount = null;
+
+			// This is to store columnNamesValues for Date, Description, and Amount
+			String depositsOtherCreditsColumnNameDateValue = null;
+			String depositsOtherCreditsColumnNameDescriptionValue = null;
+			String depositsOtherCreditsColumnNameAmountValue = null;
+			// Create a HashMap for ColumnName to ColumnValue mapper
+        	Map<String, String> depositsOtherCreditsColumnMap = new HashMap<>();
+        	// Create an arrayList of HashMap to store all rows with column values
+        	arrayListOfHashMap = new ArrayList<>();
+        	
 
 			// Iterate through all rows
 			for (int rowNumber = 0; rowNumber < sheet.getLastRowNum(); rowNumber++) {
@@ -442,7 +461,7 @@ public class ParseRawExcelFile {
 						break;
 					}
 
-
+					// Obtain information for DEPOSITS/OTHER CREDITS columnNames row
 					if (depositsOtherCreditsTitleRowDoneIn == 1) {
 
 						depositsOtherCreditsColumnNameDate = row.getCell(cellNum1).toString();
@@ -454,16 +473,81 @@ public class ParseRawExcelFile {
 						depositsOtherCreditsColumnNamesRow.add(depositsOtherCreditsColumnNameAmount);
 
 						depositsOtherCreditsTitleRowDoneIn = 0;
+						depositsOtherCreditsColumnNamesRowDoneIn = 1;
 						break;
 					}
 
+					// Obtain all DEPOSITS/OTHER CREDITS transactions [Date], [Description], [Amount]
+					if (depositsOtherCreditsColumnNamesRowDoneIn == 1) {
+						
+						// iterate to through rest of the rows until it encounters an empty cell?
+						// May need to update this condition
+						for (int newRowCounter = 0; !row.getCell(0).toString().isEmpty(); newRowCounter++) {
+							Row row2 = sheet.getRow(rowNumber);
+							
+							
+							// Iterate through cells in DEPOSITS/OTHER CREDITS transactions row
+							for (; cellNum1 < row2.getLastCellNum() - 1; cellNum1++) {
+								if (firstIterationIn == 1) {// first iteration to insert DEPOSITS/OTHER CREDITS transactions date and insert first text iteration to depositsOtherCreditsColumnNameDescriptionValue text
+									depositsOtherCreditsColumnNameDateValue = row2.getCell(cellNum1).toString();
+									depositsOtherCreditsColumnMap.put(depositsOtherCreditsColumnNameDate, depositsOtherCreditsColumnNameDateValue);
+									
+									depositsOtherCreditsColumnNameDescriptionValue = row2.getCell(++cellNum1).toString() + " ";
+									firstIterationIn = 0;
+								} else if (cellNum1 != row2.getLastCellNum() - 2) { // keep adding elements with a space in between
+									depositsOtherCreditsColumnNameDescriptionValue = depositsOtherCreditsColumnNameDescriptionValue + row2.getCell(cellNum1) + " ";
+								} else { // do not add a space if it is the last element
+									depositsOtherCreditsColumnNameDescriptionValue = depositsOtherCreditsColumnNameDescriptionValue + row2.getCell(cellNum1);
+									depositsOtherCreditsColumnMap.put(depositsOtherCreditsColumnNameDescription, depositsOtherCreditsColumnNameDescriptionValue);
+									
+									// Obtain depositsOtherCreditsColumnNameAmountValue
+									depositsOtherCreditsColumnNameAmountValue = row2.getCell(row2.getLastCellNum() - 1).toString();
+									depositsOtherCreditsColumnMap.put(depositsOtherCreditsColumnNameAmount, depositsOtherCreditsColumnNameAmountValue);
+								}
+							}
+							arrayListOfHashMap.add(depositsOtherCreditsColumnMap);
+							// reset all values for next row iteration
+							depositsOtherCreditsColumnMap = new HashMap<>();
+							depositsOtherCreditsColumnNameDateValue = null;
+							depositsOtherCreditsColumnNameDescriptionValue = null;
+							depositsOtherCreditsColumnNameAmountValue = null;
+							firstIterationIn = 1;
+							cellNum1 = 0;
+							
+							// increase row number
+							row = sheet.getRow(++rowNumber);
+						}
+						
+//						// Iterate through cells in DEPOSITS/OTHER CREDITS transactions row
+//						for (; cellNum1 < row.getLastCellNum() - 1; cellNum1++) {
+//							if (firstIterationIn == 1) {// first iteration to insert DEPOSITS/OTHER CREDITS transactions date and insert first text iteration to depositsOtherCreditsColumnNameDescriptionValue text
+//								depositsOtherCreditsColumnNameDateValue = row.getCell(cellNum1).toString();
+//								depositsOtherCreditsColumnMap.put(depositsOtherCreditsColumnNameDate, depositsOtherCreditsColumnNameDateValue);
+//								
+//								depositsOtherCreditsColumnNameDescriptionValue = row.getCell(++cellNum1).toString() + " ";
+//								firstIterationIn = 0;
+//							} else if (cellNum1 != row.getLastCellNum() - 2) { // keep adding elements with a space in between
+//								depositsOtherCreditsColumnNameDescriptionValue = depositsOtherCreditsColumnNameDescriptionValue + row.getCell(cellNum1) + " ";
+//							} else { // do not add a space if it is the last element
+//								depositsOtherCreditsColumnNameDescriptionValue = depositsOtherCreditsColumnNameDescriptionValue + row.getCell(cellNum1);
+//								depositsOtherCreditsColumnMap.put(depositsOtherCreditsColumnNameDescription, depositsOtherCreditsColumnNameDescriptionValue);
+//								
+//								// Obtain depositsOtherCreditsColumnNameAmountValue
+//								depositsOtherCreditsColumnNameAmountValue = row.getCell(row.getLastCellNum() - 1).toString();
+//								depositsOtherCreditsColumnMap.put(depositsOtherCreditsColumnNameAmount, depositsOtherCreditsColumnNameAmountValue);
+//							}
+//						}
+						
+						depositsOtherCreditsColumnNamesRowDoneIn = 0;
+						break;
+					}
 
 				}
 			}
 						
 			// done adding said row
-			depositsOtherCreditsSection.add(depositsOtherCreditsTitleRow);
-			depositsOtherCreditsSection.add(depositsOtherCreditsColumnNamesRow);
+			//depositsOtherCreditsSection.add(depositsOtherCreditsTitleRow);
+			//depositsOtherCreditsSection.add(depositsOtherCreditsColumnNamesRow);
 						
 
 		} catch (EncryptedDocumentException e) {
@@ -474,7 +558,7 @@ public class ParseRawExcelFile {
 			e.printStackTrace();
 		}
 
-		return depositsOtherCreditsSection;
+		return arrayListOfHashMap;
 	}
 	
 	

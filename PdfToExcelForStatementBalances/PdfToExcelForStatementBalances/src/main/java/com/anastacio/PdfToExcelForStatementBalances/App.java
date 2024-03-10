@@ -2,6 +2,8 @@ package com.anastacio.PdfToExcelForStatementBalances;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -13,8 +15,8 @@ public class App {
 	public static void main(String[] args) {
 		
 		// Obtain pdf file
-		File pdfFile = new File("C:\\Users\\anast\\Documents\\Online Accounts\\Prosperity Bank\\Account Statements\\2024 Statements\\statement_02112024.pdf");
-		//File pdfFile = new File("C:\\Users\\anast\\Documents\\Online Accounts\\Prosperity Bank\\Account Statements\\2018 Statements\\statement_06112018.pdf");
+		//File pdfFile = new File("C:\\Users\\anast\\Documents\\Online Accounts\\Prosperity Bank\\Account Statements\\2024 Statements\\statement_02112024.pdf");
+		File pdfFile = new File("C:\\Users\\anast\\Documents\\Online Accounts\\Prosperity Bank\\Account Statements\\2018 Statements\\statement_06112018.pdf");
 		
 		
 		// Convert pdf file to .xlsx extension
@@ -58,11 +60,15 @@ public class App {
 		System.out.println();
 		
 		
-		ArrayList<ArrayList<String>> depositsOtherCreditsSectionInfo = parseRawExcelFile.getDepositsOtherCreditsSection();
-		System.out.println(depositsOtherCreditsSectionInfo.get(0).get(0));
-		System.out.println(depositsOtherCreditsSectionInfo.get(1).get(0) 
-				+ " " + depositsOtherCreditsSectionInfo.get(1).get(1) 
-				+ " " + depositsOtherCreditsSectionInfo.get(1).get(2));
+		List<Map<String, String>> depositsOtherCreditsSection = parseRawExcelFile.getDepositsOtherCreditsSection();
+		
+		// Access elements in the ArrayList of HashMap
+        for (Map<String, String> hashMap : depositsOtherCreditsSection) {
+            for (Map.Entry<String, String> entry : hashMap.entrySet()) {
+                System.out.println(entry.getKey() + " --> " + entry.getValue());
+            }
+            System.out.println();
+        }
 		
 		
 		
