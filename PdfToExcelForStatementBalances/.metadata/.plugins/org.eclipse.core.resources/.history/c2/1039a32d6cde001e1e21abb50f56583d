@@ -1,0 +1,16 @@
+package com.anastacio.PdfToExcelForStatementBalances;
+
+import java.io.File;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+
+public class PdfParser {
+	private PDDocument pdfDocument = null;
+	private PDFTextStripper pdfStripper = null;
+	private String pdfText = null;
+	
+	public void parsePdfFile(File pdfFile) {
+		
+	}
+}
