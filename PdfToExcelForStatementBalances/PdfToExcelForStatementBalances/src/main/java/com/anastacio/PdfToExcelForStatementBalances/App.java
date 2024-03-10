@@ -1,6 +1,7 @@
 package com.anastacio.PdfToExcelForStatementBalances;
 
 import java.io.File;
+import java.util.ArrayList;
 
 
 
@@ -12,8 +13,8 @@ public class App {
 	public static void main(String[] args) {
 		
 		// Obtain pdf file
-		File pdfFile = new File("C:\\Users\\anast\\Documents\\Online Accounts\\Prosperity Bank\\Account Statements\\2024 Statements\\statement_02112024.pdf");
-		//File pdfFile = new File("C:\\Users\\anast\\Documents\\Online Accounts\\Prosperity Bank\\Account Statements\\2018 Statements\\statement_06112018.pdf");
+		//File pdfFile = new File("C:\\Users\\anast\\Documents\\Online Accounts\\Prosperity Bank\\Account Statements\\2024 Statements\\statement_02112024.pdf");
+		File pdfFile = new File("C:\\Users\\anast\\Documents\\Online Accounts\\Prosperity Bank\\Account Statements\\2018 Statements\\statement_06112018.pdf");
 		
 		
 		// Convert pdf file to .xlsx extension
@@ -42,11 +43,13 @@ public class App {
 		System.out.println("Address Name: " + parseRawExcelFile.getAddressName());
 		System.out.println("Address City: " + parseRawExcelFile.getAddressCity());
 		
-		System.out.println(parseRawExcelFile.getStatementSummary().get(0).get(0).toString() + " " + parseRawExcelFile.getStatementSummary().get(0).get(1).toString());
+		ArrayList<ArrayList<String>> statementSummaryInfo = parseRawExcelFile.getStatementSummary(); 
 		
-		System.out.println(parseRawExcelFile.getStatementSummary().get(1).get(0).toString() 
-				+ " " + parseRawExcelFile.getStatementSummary().get(1).get(1).toString()
-				+ " " + parseRawExcelFile.getStatementSummary().get(1).get(2).toString()
+		System.out.println(statementSummaryInfo.get(0).get(0).toString() + " " + statementSummaryInfo.get(0).get(1).toString());
+		
+		System.out.println(statementSummaryInfo.get(1).get(0).toString() 
+				+ " " + statementSummaryInfo.get(1).get(1).toString()
+				+ " " + statementSummaryInfo.get(1).get(2).toString()
 				);
 		
 		

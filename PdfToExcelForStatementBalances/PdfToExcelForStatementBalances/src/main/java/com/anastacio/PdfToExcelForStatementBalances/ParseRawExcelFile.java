@@ -214,13 +214,17 @@ public class ParseRawExcelFile {
 			Sheet sheet = workbook.getSheetAt(0);
 
 			
-			// flag to indicate if the loop iteration has it the section for STATEMENT SUMMARY
+			// flag to indicate if the loop iteration has completed for statementSummaryRow
 			int statementSummaryIn = 0;
+			// flag to indicate if the loop iteration has completed for beginningSummaryRow
+			int beginningBalanceIn = 0;
 			
 			// This is to store STATEMENT SUMMARY row
 			ArrayList<String> statementSummaryTitleRow = null;
 			// this is to store what's after "STATEMENT SUMMARY"
 			String statementSummaryTitleInfo = null;
+			// this is to indicate first iteration when iterating through what's after STATEMENT SUMMARY
+			int statementSummaryTitleInfoFirstIt = 1;
 			
 			// This is to store Beginning Balance row
 			ArrayList<String> beginningBalanceRow = new ArrayList<>();
@@ -230,38 +234,49 @@ public class ParseRawExcelFile {
 			
 			for (int rowNumber = 0; rowNumber < sheet.getLastRowNum(); rowNumber++) {
 				Row row = sheet.getRow(rowNumber);
-				// Iterate through raw excel file until it finds STATEMENT SUMMARY row
-				if (row.getCell(0).toString().equals("STATEMENT") && row.getCell(1).toString().equals("SUMMARY")) {
-					statementSummaryIn = 1;
-					
-					statementSummaryTitleRow = new ArrayList<>();
-					statementSummaryTitleRow.add(row.getCell(0).toString() + " " + row.getCell(1).toString() + " -------> ");
-					
-					// Iterate through the rest of STATEMENT SUMMARY row
-					for (int cellNum = 2; cellNum < row.getLastCellNum(); cellNum++) {
-						if (cellNum == 2) {// first iteration to insert first value to statementSummaryRestInfo to avoid first value from being null
-							statementSummaryTitleInfo = row.getCell(cellNum) + " ";
-						} else if (cellNum != row.getLastCellNum() - 1) { // keep adding elements with a space in between
-							statementSummaryTitleInfo = statementSummaryTitleInfo + row.getCell(cellNum) + " ";
-						} else { // do not add a space if it is the last element
-							statementSummaryTitleInfo = statementSummaryTitleInfo + row.getCell(cellNum);
-							statementSummaryTitleRow.add(statementSummaryTitleInfo);
+				
+				
+				// Iterate through the cells in the row to find STATEMENT SUMMARY
+				for (int cellNum1 = 0; cellNum1 < row.getLastCellNum(); cellNum1++) {
+					if (row.getCell(cellNum1).toString().equals("STATEMENT") && row.getCell(cellNum1 + 1).toString().equals("SUMMARY")) {
+						statementSummaryIn = 1;
+						
+						statementSummaryTitleRow = new ArrayList<>();
+						statementSummaryTitleRow.add(row.getCell(cellNum1).toString() + " " + row.getCell(cellNum1 + 1).toString() + " -------> ");
+						
+						// Obtain information for STATEMENT SUMMARY row
+						// Iterate through the rest of STATEMENT SUMMARY row
+						for (cellNum1 = cellNum1 + 2; cellNum1 < row.getLastCellNum(); cellNum1++) {
+							if (statementSummaryTitleInfoFirstIt == 1) {// first iteration to insert first value to statementSummaryRestInfo to avoid first value from being null
+								statementSummaryTitleInfo = row.getCell(cellNum1) + " ";
+								statementSummaryTitleInfoFirstIt = 0;
+							} else if (cellNum1 != row.getLastCellNum() - 1) { // keep adding elements with a space in between
+								statementSummaryTitleInfo = statementSummaryTitleInfo + row.getCell(cellNum1) + " ";
+							} else { // do not add a space if it is the last element
+								statementSummaryTitleInfo = statementSummaryTitleInfo + row.getCell(cellNum1);
+								statementSummaryTitleRow.add(statementSummaryTitleInfo);
+							}
 						}
+					} else if (statementSummaryIn == 1) {
+						// Obtain information for Beginning Balance row
+						beginningBalanceDate = row.getCell(0).toString();
+						beginningBalanceText = row.getCell(1).toString() + " " + row.getCell(2).toString();
+						beginningBalanceAmount = row.getCell(3).toString();
+						
+						beginningBalanceRow.add(beginningBalanceDate);
+						beginningBalanceRow.add(beginningBalanceText);
+						beginningBalanceRow.add(beginningBalanceAmount);
+						
+						statementSummaryIn = 0;
+						beginningBalanceIn = 1;
+					} else if (beginningBalanceIn == 1) {
+						System.out.println("Begin!");
+						beginningBalanceIn = 0;	
 					}
-					
-				} else if (statementSummaryIn == 1) {
-					// Obtain information for Beginning Balance row
-					beginningBalanceDate = row.getCell(0).toString();
-					beginningBalanceText = row.getCell(1).toString() + " " + row.getCell(2).toString();
-					beginningBalanceAmount = row.getCell(3).toString();
-					
-					beginningBalanceRow.add(beginningBalanceDate);
-					beginningBalanceRow.add(beginningBalanceText);
-					beginningBalanceRow.add(beginningBalanceAmount);
-					break;
 				}
-					
+				
 			}
+			
 			statementSummary.add(statementSummaryTitleRow); // done adding statement summary title row
 			statementSummary.add(beginningBalanceRow); // done adding beginning balance row
 						
