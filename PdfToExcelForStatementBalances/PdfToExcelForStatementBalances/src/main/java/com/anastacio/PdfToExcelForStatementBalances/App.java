@@ -42,15 +42,16 @@ public class App {
 		System.out.println("Owner 2: " + parseRawExcelFile.getAccountOwner()[1].toString());
 		System.out.println("Address Name: " + parseRawExcelFile.getAddressName());
 		System.out.println("Address City: " + parseRawExcelFile.getAddressCity());
-		
-		ArrayList<ArrayList<String>> statementSummaryInfo = parseRawExcelFile.getStatementSummary(); 
+		System.out.println();
+		ArrayList<ArrayList<String>> statementSummaryInfo = parseRawExcelFile.getStatementSummary();
 		
 		System.out.println(statementSummaryInfo.get(0).get(0).toString() + " " + statementSummaryInfo.get(0).get(1).toString());
-		
 		System.out.println(statementSummaryInfo.get(1).get(0).toString() 
 				+ " " + statementSummaryInfo.get(1).get(1).toString()
 				+ " " + statementSummaryInfo.get(1).get(2).toString()
 				);
+		
+		System.out.println(statementSummaryInfo.get(2).get(0).toString() + " " + statementSummaryInfo.get(2).get(1).toString());
 		
 		
 	} // end of main

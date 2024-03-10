@@ -232,19 +232,25 @@ public class ParseRawExcelFile {
 			String beginningBalanceText = null;
 			String beginningBalanceAmount = null;
 			
+			// This is to store Beginning Balance row
+			ArrayList<String> depositsOtherCreditsRow = new ArrayList<>();
+			String depositsOtherCreditsText = null;
+			String depositsOtherCreditsAmount = null;
+
+			// Iterate through all rows
 			for (int rowNumber = 0; rowNumber < sheet.getLastRowNum(); rowNumber++) {
 				Row row = sheet.getRow(rowNumber);
 				
 				
-				// Iterate through the cells in the row to find STATEMENT SUMMARY
+				// Iterate through all cells
 				for (int cellNum1 = 0; cellNum1 < row.getLastCellNum(); cellNum1++) {
+					
+					// Obtain information for STATEMENT SUMMARY row
 					if (row.getCell(cellNum1).toString().equals("STATEMENT") && row.getCell(cellNum1 + 1).toString().equals("SUMMARY")) {
-						statementSummaryIn = 1;
 						
 						statementSummaryTitleRow = new ArrayList<>();
 						statementSummaryTitleRow.add(row.getCell(cellNum1).toString() + " " + row.getCell(cellNum1 + 1).toString() + " -------> ");
 						
-						// Obtain information for STATEMENT SUMMARY row
 						// Iterate through the rest of STATEMENT SUMMARY row
 						for (cellNum1 = cellNum1 + 2; cellNum1 < row.getLastCellNum(); cellNum1++) {
 							if (statementSummaryTitleInfoFirstIt == 1) {// first iteration to insert first value to statementSummaryRestInfo to avoid first value from being null
@@ -257,6 +263,9 @@ public class ParseRawExcelFile {
 								statementSummaryTitleRow.add(statementSummaryTitleInfo);
 							}
 						}
+						statementSummaryIn = 1;
+						break;
+						
 					} else if (statementSummaryIn == 1) {
 						// Obtain information for Beginning Balance row
 						beginningBalanceDate = row.getCell(0).toString();
@@ -269,16 +278,39 @@ public class ParseRawExcelFile {
 						
 						statementSummaryIn = 0;
 						beginningBalanceIn = 1;
+						break;
+						
 					} else if (beginningBalanceIn == 1) {
-						System.out.println("Begin!");
-						beginningBalanceIn = 0;	
+						
+						// Obtain information for Deposits/Other row
+						// Iterate through Deposits/Other row
+						for (; cellNum1 < row.getLastCellNum() - 1; cellNum1++) {
+							if (statementSummaryTitleInfoFirstIt == 1) {// first iteration to insert first value to Deposits/Other to avoid first value from being null
+								depositsOtherCreditsText = row.getCell(cellNum1) + " ";
+								statementSummaryTitleInfoFirstIt = 0;
+							} else if (cellNum1 != row.getLastCellNum() - 2) { // keep adding elements with a space in between
+								depositsOtherCreditsText = depositsOtherCreditsText + row.getCell(cellNum1) + " ";
+							} else { // do not add a space if it is the last element
+								depositsOtherCreditsText = depositsOtherCreditsText + row.getCell(cellNum1);
+							}
+						}
+						
+						// Obtain depositsOtherCreditsAmount
+						depositsOtherCreditsAmount = row.getCell(row.getLastCellNum() - 1).toString();
+						
+						depositsOtherCreditsRow.add(depositsOtherCreditsText);
+						depositsOtherCreditsRow.add(depositsOtherCreditsAmount);
+						
+						beginningBalanceIn = 0;
+						break;
 					}
 				}
-				
+				statementSummaryTitleInfoFirstIt = 1;
 			}
 			
 			statementSummary.add(statementSummaryTitleRow); // done adding statement summary title row
 			statementSummary.add(beginningBalanceRow); // done adding beginning balance row
+			statementSummary.add(depositsOtherCreditsRow); // done deposits/other credits row 
 						
 
 		} catch (EncryptedDocumentException e) {
