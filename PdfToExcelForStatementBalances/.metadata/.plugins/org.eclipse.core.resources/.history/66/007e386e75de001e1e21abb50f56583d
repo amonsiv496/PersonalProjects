@@ -1,9 +1,0 @@
-package com.anastacio.PdfToExcelForStatementBalances;
-
-import java.io.File;
-
-public class RawTextToRawExcel {
-	public File processRawTextFileToRawExcel(String pdfText) {
-		return new File("file");
-	}
-}

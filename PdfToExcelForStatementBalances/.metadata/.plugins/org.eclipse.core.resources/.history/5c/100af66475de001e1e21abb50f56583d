@@ -1,7 +1,0 @@
-package com.anastacio.PdfToExcelForStatementBalances;
-
-public class RawTextToRawExcel {
-	public void processRawTextFileToRawExcel(String pdfText) {
-		
-	}
-}

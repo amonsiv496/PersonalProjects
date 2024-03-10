@@ -1,9 +1,0 @@
-package com.anastacio.PdfToExcelForStatementBalances;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-
-public class PdfParser {
-	private PDDocument pdfDocument = null;
-	private PDFTextStripper pdfStripper = null;
-}

@@ -1,7 +1,0 @@
-package com.anastacio.PdfToExcelForStatementBalances;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-
-public class PdfParser {
-	private PDDocument pdfDocument = null;
-}
