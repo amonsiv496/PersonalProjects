@@ -402,6 +402,9 @@ public class ParseRawExcelFile {
 		
 		// Array list of array list for depositsOtherCreditsSection information
 		ArrayList<ArrayList<String>> depositsOtherCreditsSection = new ArrayList<>();
+
+		// flag to indicate if the loop iteration has completed for said row
+		int depositsOtherCreditsTitleRowDoneIn = 0;
 		
 		try {
 			
@@ -416,6 +419,12 @@ public class ParseRawExcelFile {
 			// this is to store DEPOSITS/OTHER CREDITS title text
 			String depositsOtherCreditsTitleText = null;
 
+			// This is to store columnNamesText for Date, Description, and Amount row
+			ArrayList<String> depositsOtherCreditsColumnNamesRow = new ArrayList<>();
+			String depositsOtherCreditsColumnNameDate = null;
+			String depositsOtherCreditsColumnNameDescription = null;
+			String depositsOtherCreditsColumnNameAmount = null;
+
 			// Iterate through all rows
 			for (int rowNumber = 0; rowNumber < sheet.getLastRowNum(); rowNumber++) {
 				Row row = sheet.getRow(rowNumber);
@@ -428,12 +437,33 @@ public class ParseRawExcelFile {
 						
 						depositsOtherCreditsTitleText = row.getCell(cellNum1).toString() + " " + row.getCell(cellNum1 + 1).toString();
 						depositsOtherCreditsTitleRow.add(depositsOtherCreditsTitleText.toString());
+
+						depositsOtherCreditsTitleRowDoneIn = 1;
+						break;
 					}
+
+
+					if (depositsOtherCreditsTitleRowDoneIn == 1) {
+
+						depositsOtherCreditsColumnNameDate = row.getCell(cellNum1).toString();
+						depositsOtherCreditsColumnNameDescription = row.getCell(cellNum1 + 1).toString();
+						depositsOtherCreditsColumnNameAmount = row.getCell(cellNum1 + 2).toString();
+
+						depositsOtherCreditsColumnNamesRow.add(depositsOtherCreditsColumnNameDate);
+						depositsOtherCreditsColumnNamesRow.add(depositsOtherCreditsColumnNameDescription);
+						depositsOtherCreditsColumnNamesRow.add(depositsOtherCreditsColumnNameAmount);
+
+						depositsOtherCreditsTitleRowDoneIn = 0;
+						break;
+					}
+
+
 				}
 			}
 						
 			// done adding said row
 			depositsOtherCreditsSection.add(depositsOtherCreditsTitleRow);
+			depositsOtherCreditsSection.add(depositsOtherCreditsColumnNamesRow);
 						
 
 		} catch (EncryptedDocumentException e) {

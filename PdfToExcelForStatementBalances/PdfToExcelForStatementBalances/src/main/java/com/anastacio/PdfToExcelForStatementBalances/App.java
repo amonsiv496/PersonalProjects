@@ -60,6 +60,9 @@ public class App {
 		
 		ArrayList<ArrayList<String>> depositsOtherCreditsSectionInfo = parseRawExcelFile.getDepositsOtherCreditsSection();
 		System.out.println(depositsOtherCreditsSectionInfo.get(0).get(0));
+		System.out.println(depositsOtherCreditsSectionInfo.get(1).get(0) 
+				+ " " + depositsOtherCreditsSectionInfo.get(1).get(1) 
+				+ " " + depositsOtherCreditsSectionInfo.get(1).get(2));
 		
 		
 		
