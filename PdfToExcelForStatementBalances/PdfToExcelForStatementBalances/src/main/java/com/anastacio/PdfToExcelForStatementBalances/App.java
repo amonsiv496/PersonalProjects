@@ -59,9 +59,8 @@ public class App {
 				+ " " + statementSummaryInfo.get(4).get(2).toString());
 		System.out.println();
 		
-		
+		System.out.println("======================= DEPOSITS/OTHER CREDITS =======================");
 		List<Map<String, String>> depositsOtherCreditsSection = parseRawExcelFile.getDepositsOtherCreditsSection();
-		
 		// Access elements in the ArrayList of HashMap
         for (Map<String, String> hashMap : depositsOtherCreditsSection) {
             for (Map.Entry<String, String> entry : hashMap.entrySet()) {
@@ -69,6 +68,7 @@ public class App {
             }
             System.out.println();
         }
+        System.out.println();
 		
 		
 		

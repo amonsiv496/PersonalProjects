@@ -444,11 +444,11 @@ public class ParseRawExcelFile {
         	arrayListOfHashMap = new ArrayList<>();
         	
 
-			// Iterate through all rows
+			// Iterate through all rows in raw Excel File starting from first row
 			for (int rowNumber = 0; rowNumber < sheet.getLastRowNum(); rowNumber++) {
 				Row row = sheet.getRow(rowNumber);
 				
-				// Iterate through all cells in row
+				// Iterate through all cells in current row
 				for (int cellNum1 = 0; cellNum1 < row.getLastCellNum(); cellNum1++) {
 					
 					// Obtain information for DEPOSITS/OTHER CREDITS row
@@ -518,37 +518,12 @@ public class ParseRawExcelFile {
 							row = sheet.getRow(++rowNumber);
 						}
 						
-//						// Iterate through cells in DEPOSITS/OTHER CREDITS transactions row
-//						for (; cellNum1 < row.getLastCellNum() - 1; cellNum1++) {
-//							if (firstIterationIn == 1) {// first iteration to insert DEPOSITS/OTHER CREDITS transactions date and insert first text iteration to depositsOtherCreditsColumnNameDescriptionValue text
-//								depositsOtherCreditsColumnNameDateValue = row.getCell(cellNum1).toString();
-//								depositsOtherCreditsColumnMap.put(depositsOtherCreditsColumnNameDate, depositsOtherCreditsColumnNameDateValue);
-//								
-//								depositsOtherCreditsColumnNameDescriptionValue = row.getCell(++cellNum1).toString() + " ";
-//								firstIterationIn = 0;
-//							} else if (cellNum1 != row.getLastCellNum() - 2) { // keep adding elements with a space in between
-//								depositsOtherCreditsColumnNameDescriptionValue = depositsOtherCreditsColumnNameDescriptionValue + row.getCell(cellNum1) + " ";
-//							} else { // do not add a space if it is the last element
-//								depositsOtherCreditsColumnNameDescriptionValue = depositsOtherCreditsColumnNameDescriptionValue + row.getCell(cellNum1);
-//								depositsOtherCreditsColumnMap.put(depositsOtherCreditsColumnNameDescription, depositsOtherCreditsColumnNameDescriptionValue);
-//								
-//								// Obtain depositsOtherCreditsColumnNameAmountValue
-//								depositsOtherCreditsColumnNameAmountValue = row.getCell(row.getLastCellNum() - 1).toString();
-//								depositsOtherCreditsColumnMap.put(depositsOtherCreditsColumnNameAmount, depositsOtherCreditsColumnNameAmountValue);
-//							}
-//						}
-						
 						depositsOtherCreditsColumnNamesRowDoneIn = 0;
 						break;
 					}
 
 				}
-			}
-						
-			// done adding said row
-			//depositsOtherCreditsSection.add(depositsOtherCreditsTitleRow);
-			//depositsOtherCreditsSection.add(depositsOtherCreditsColumnNamesRow);
-						
+			}						
 
 		} catch (EncryptedDocumentException e) {
 			// TODO Auto-generated catch block
