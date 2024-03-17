@@ -402,9 +402,6 @@ public class ParseRawExcelFile {
 	
 	public List<Map<String, String>> getDepositsOtherCreditsSection() {
 		Workbook workbook = null;
-		
-		// Array list of array list for depositsOtherCreditsSection information
-		ArrayList<ArrayList<String>> depositsOtherCreditsSection = new ArrayList<>();
 
 		// flag to indicate if the loop iteration has completed for said row
 		int depositsOtherCreditsTitleRowDoneIn = 0;
@@ -480,8 +477,8 @@ public class ParseRawExcelFile {
 					// Obtain all DEPOSITS/OTHER CREDITS transactions [Date], [Description], [Amount]
 					if (depositsOtherCreditsColumnNamesRowDoneIn == 1) {
 						
-						// iterate to through rest of the rows until it encounters an empty cell?
-						// May need to update this condition
+						// iterate to through rest of the rows for DEPOSITS/OTHER CREDITS until it encounters an empty cell?
+						// TODO: May need to update this condition
 						for (int newRowCounter = 0; !row.getCell(0).toString().isEmpty(); newRowCounter++) {
 							Row row2 = sheet.getRow(rowNumber);
 							
@@ -523,7 +520,8 @@ public class ParseRawExcelFile {
 					}
 
 				}
-			}						
+			}
+						
 
 		} catch (EncryptedDocumentException e) {
 			// TODO Auto-generated catch block
@@ -535,8 +533,156 @@ public class ParseRawExcelFile {
 
 		return arrayListOfHashMap;
 	}
-	
-	
+
+
+
+
+
+
+
+
+
+	public List<Map<String, String>> getOtherDebitsSection() {
+		Workbook workbook = null;
+
+		// flag to indicate if the loop iteration has completed for said row
+		int otherDebitsTitleRowDoneIn = 0;
+		int otherDebitsColumnNamesRowDoneIn = 0;
+		
+		List<Map<String, String>> arrayListOfHashMap = new ArrayList<>();
+		
+		try {
+			
+			rawExcelFileInput = new FileInputStream(rawExcelFile);
+			workbook = WorkbookFactory.create(rawExcelFileInput);
+
+			// get the first sheet of raw excel file
+			Sheet sheet = workbook.getSheetAt(0);
+
+			// this is to indicate first iteration when iterating through row cells
+			int firstIterationIn = 1;
+			
+			// This is to store OTHER DEBITS title row
+			ArrayList<String> otherDebitsTitleRow = new ArrayList<>();
+			// this is to store OTHER DEBITS title text
+			String otherDebitsTitleText = null;
+
+			// This is to store columnNamesText for Date, Description, and Amount row
+			ArrayList<String> otherDebitsColumnNamesRow = new ArrayList<>();
+			String otherDebitsColumnNameDate = null;
+			String otherDebitsColumnNameDescription = null;
+			String otherDebitsColumnNameAmount = null;
+
+			// This is to store columnNamesValues for Date, Description, and Amount
+			String otherDebitsColumnNameDateValue = null;
+			String otherDebitsColumnNameDescriptionValue = null;
+			String otherDebitsColumnNameAmountValue = null;
+			// Create a HashMap for ColumnName to ColumnValue mapper
+        	Map<String, String> otherDebitsColumnMap = new HashMap<>();
+        	// Create an arrayList of HashMap to store all rows with column values
+        	arrayListOfHashMap = new ArrayList<>();
+        	
+
+			// Iterate through all rows in raw Excel File starting from first row
+			for (int rowNumber = 0; rowNumber < sheet.getLastRowNum(); rowNumber++) {
+				Row row = sheet.getRow(rowNumber);
+				
+				// Iterate through all cells in current row
+				for (int cellNum1 = 0; cellNum1 < row.getLastCellNum(); cellNum1++) {
+					
+					// Obtain information for OTHER DEBITS row
+					if (row.getCell(cellNum1).toString().equals("OTHER") && row.getCell(cellNum1 + 1).toString().equals("DEBITS")) {
+						
+						otherDebitsTitleText = row.getCell(cellNum1).toString() + " " + row.getCell(cellNum1 + 1).toString();
+						otherDebitsTitleRow.add(otherDebitsTitleText.toString());
+
+						otherDebitsTitleRowDoneIn = 1;
+						break;
+					}
+
+					// Obtain information for OTHER DEBITS columnNames row
+					if (otherDebitsTitleRowDoneIn == 1) {
+
+						otherDebitsColumnNameDate = row.getCell(cellNum1).toString();
+						otherDebitsColumnNameDescription = row.getCell(cellNum1 + 1).toString();
+						otherDebitsColumnNameAmount = row.getCell(cellNum1 + 2).toString();
+
+						otherDebitsColumnNamesRow.add(otherDebitsColumnNameDate);
+						otherDebitsColumnNamesRow.add(otherDebitsColumnNameDescription);
+						otherDebitsColumnNamesRow.add(otherDebitsColumnNameAmount);
+
+						otherDebitsTitleRowDoneIn = 0;
+						otherDebitsColumnNamesRowDoneIn = 1;
+						break;
+					}
+
+					// Obtain all OTHER DEBITS transactions [Date], [Description], [Amount]
+					if (otherDebitsColumnNamesRowDoneIn == 1) {
+						
+						// iterate to through rest of the rows for OTHER DEBITS until it encounters 'MEMBER' value?
+						// TODO: May need to update this condition
+						for (int newRowCounter = 0; !row.getCell(0).toString().equals("MEMBER"); newRowCounter++) {
+							Row row2 = sheet.getRow(rowNumber);
+							
+							
+							// Iterate through cells in OTHER DEBITS transactions row
+							for (; cellNum1 < row2.getLastCellNum() - 1; cellNum1++) {
+								if (firstIterationIn == 1) {// first iteration to insert OTHER DEBITS transactions date and insert first text iteration to otherDebitsColumnNameDescriptionValue text
+									otherDebitsColumnNameDateValue = row2.getCell(cellNum1).toString();
+									otherDebitsColumnMap.put(otherDebitsColumnNameDate, otherDebitsColumnNameDateValue);
+									
+									otherDebitsColumnNameDescriptionValue = row2.getCell(++cellNum1).toString() + " ";
+									firstIterationIn = 0;
+								} else if (cellNum1 != row2.getLastCellNum() - 2) { // keep adding elements with a space in between
+									otherDebitsColumnNameDescriptionValue = otherDebitsColumnNameDescriptionValue + row2.getCell(cellNum1) + " ";
+								} else { // do not add a space if it is the last element
+									otherDebitsColumnNameDescriptionValue = otherDebitsColumnNameDescriptionValue + row2.getCell(cellNum1);
+									otherDebitsColumnMap.put(otherDebitsColumnNameDescription, otherDebitsColumnNameDescriptionValue);
+									
+									// Obtain otherDebitsColumnNameAmountValue
+									otherDebitsColumnNameAmountValue = row2.getCell(row2.getLastCellNum() - 1).toString();
+									otherDebitsColumnMap.put(otherDebitsColumnNameAmount, otherDebitsColumnNameAmountValue);
+								}
+							}
+							arrayListOfHashMap.add(otherDebitsColumnMap);
+							// reset all values for next row iteration
+							otherDebitsColumnMap = new HashMap<>();
+							otherDebitsColumnNameDateValue = null;
+							otherDebitsColumnNameDescriptionValue = null;
+							otherDebitsColumnNameAmountValue = null;
+							firstIterationIn = 1;
+							cellNum1 = 0;
+							
+							// increase row number
+							row = sheet.getRow(++rowNumber);
+							
+							// TODO: improve this code to stop second loop iteration for OTHER DEBITS
+							if (row.getCell(1).toString().equals("TOTAL") && 
+								row.getCell(2).toString().equals("OVERDRAFT") && 
+								row.getCell(3).toString().equals("FEES")
+							   ) {
+								break;
+							}
+						}
+						
+						otherDebitsColumnNamesRowDoneIn = 0;
+						break;
+					}
+
+				}
+			}
+						
+
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return arrayListOfHashMap;
+	}
 	
 }
 

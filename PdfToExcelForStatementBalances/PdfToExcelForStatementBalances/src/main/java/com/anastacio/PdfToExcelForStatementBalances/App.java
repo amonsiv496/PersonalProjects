@@ -70,6 +70,21 @@ public class App {
         }
         System.out.println();
 		
+        
+        
+        
+        
+        
+        System.out.println("======================= OTHER DEBITS =======================");
+		List<Map<String, String>> otherDebitsSection = parseRawExcelFile.getOtherDebitsSection();
+		// Access elements in the ArrayList of HashMap
+        for (Map<String, String> hashMap : otherDebitsSection) {
+            for (Map.Entry<String, String> entry : hashMap.entrySet()) {
+                System.out.println(entry.getKey() + " --> " + entry.getValue());
+            }
+            System.out.println();
+        }
+        System.out.println();
 		
 		
 	} // end of main
