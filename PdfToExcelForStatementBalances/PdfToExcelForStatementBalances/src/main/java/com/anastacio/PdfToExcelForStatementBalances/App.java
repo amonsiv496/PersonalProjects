@@ -37,6 +37,10 @@ public class App {
 		// Parse raw excel file
 		ParseRawExcelFile parseRawExcelFile = new ParseRawExcelFile(rawExcelFile);
 		
+		// Obtain Entity Full Name
+		System.out.println("Entity Full Name: " + parseRawExcelFile.getEntityFullName());
+		System.out.println();
+		
 		// Obtain raw excel file information
 		System.out.println("Statement Date: " + parseRawExcelFile.getStatementDate());
 		System.out.println("Account Number: " + parseRawExcelFile.getAccountNumber());
@@ -47,6 +51,7 @@ public class App {
 		System.out.println();
 		
 		
+		System.out.println("============================== STATEMENT SUMMARY ==============================");
 		ArrayList<ArrayList<String>> statementSummaryInfo = parseRawExcelFile.getStatementSummary();
 		System.out.println(statementSummaryInfo.get(0).get(0).toString() + " " + statementSummaryInfo.get(0).get(1).toString());
 		System.out.println(statementSummaryInfo.get(1).get(0).toString() 

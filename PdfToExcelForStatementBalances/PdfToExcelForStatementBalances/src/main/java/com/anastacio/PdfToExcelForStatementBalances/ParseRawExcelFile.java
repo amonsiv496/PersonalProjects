@@ -684,5 +684,10 @@ public class ParseRawExcelFile {
 		return arrayListOfHashMap;
 	}
 	
+	// TODO: Improve this method to obtain other entities
+	String getEntityFullName() {
+		return "Prosperity Bank";
+	}
+	
 }
 
