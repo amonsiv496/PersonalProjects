@@ -1,0 +1,6 @@
+C:\Users\anast\Documents\GitRepos\PersonalProjects\PdfToExcelForStatementBalances\MonsivaisStaging\bin\Debug\MonsivaisStaging.dacpac
+C:\Users\anast\Documents\GitRepos\PersonalProjects\PdfToExcelForStatementBalances\MonsivaisStaging\bin\Debug\MonsivaisStaging.dll
+C:\Users\anast\Documents\GitRepos\PersonalProjects\PdfToExcelForStatementBalances\MonsivaisStaging\bin\Debug\MonsivaisStaging.pdb
+C:\Users\anast\Documents\GitRepos\PersonalProjects\PdfToExcelForStatementBalances\MonsivaisStaging\obj\Debug\MonsivaisStaging.sqlproj.AssemblyReference.cache
+C:\Users\anast\Documents\GitRepos\PersonalProjects\PdfToExcelForStatementBalances\MonsivaisStaging\obj\Debug\MonsivaisStaging.dll
+C:\Users\anast\Documents\GitRepos\PersonalProjects\PdfToExcelForStatementBalances\MonsivaisStaging\obj\Debug\MonsivaisStaging.pdb

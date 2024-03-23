@@ -2,3 +2,7 @@
 PdfToExcelForStatementBalances/.settings/
 PdfToExcelForStatementBalances/.classpath
 PdfToExcelForStatementBalances/.project
+
+# SQL Server files
+*.mdf
+*.ldf
